@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Games & Tournaments - Play4Solidarity</title>
+    <style>
+        /* STYLES GÉNÉRAUX */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffe9ef;
+            color: #333;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #1a2851 0%, #0d1b3e 100%);
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        header .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header .logo-image {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff3366 0%, #ff6b9d 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(255, 51, 102, 0.3);
+        }
+
+        header .logo-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: white;
+        }
+
+        header nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 6px;
+        }
+
+        header nav a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ff3366;
+        }
+
+        header nav a.contact-btn {
+            background: linear-gradient(135deg, #ff3366 0%, #ff5588 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(255, 51, 102, 0.3);
+        }
+
+        header nav a.contact-btn:hover {
+            background: linear-gradient(135deg, #ff1a52 0%, #ff3366 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 51, 102, 0.4);
+        }
+
+        /* PAGES */
+        .page {
+            display: none;
+            min-height: calc(100vh - 140px);
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* PAGE PRINCIPALE */
+        h1 {
+            margin-left: 40px;
+            margin-top: 40px;
+            font-size: 28px;
+            color: #0a1d4a;
+        }
+
+        .cards-container {
+            display: flex;
+            gap: 25px;
+            padding: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: #ffffff;
+            width: 350px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            border: 1px solid #eaeaea;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+
+        .card-img-container {
+            width: 100%;
+            height: 200px;
+            position: relative;
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .img-placeholder {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ff3366;
+            text-align: center;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-content h3 {
+            margin: 0;
+            font-size: 20px;
+            color: #0a1d4a;
+        }
+
+        .date {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .description {
+            margin-top: 12px;
+            line-height: 1.4;
+            font-size: 15px;
+            color: #666;
+        }
+
+        .price {
+            margin-top: 10px;
+            font-size: 16px;
+            color: #ff3366;
+            font-weight: bold;
+        }
+
+        .benef {
+            margin-top: 5px;
+            font-size: 14px;
+            color: #ff3366;
+            font-weight: bold;
+        }
+
+        .btn-details {
+            margin-top: 15px;
+            display: inline-block;
+            background: #0a1d4a;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-details:hover {
+            background-color: #102b6b;
+        }
+
+        /* PAGE DE DÉTAIL */
+        .tournament-detail {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .detail-header {
+            background: #0a1d4a;
+            color: white;
+            padding: 30px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .detail-header h2 {
+            margin: 0;
+            font-size: 28px;
+            color: white;
+        }
+
+        .detail-date {
+            font-size: 16px;
+            margin-top: 10px;
+            color: rgba(255,255,255,0.9);
+        }
+
+        .detail-content {
+            background: white;
+            padding: 30px;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .detail-description {
+            line-height: 1.6;
+            font-size: 16px;
+            margin-bottom: 25px;
+            color: #555;
+        }
+
+        .beneficiary-info {
+            background: #f8f9ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            border-left: 4px solid #ff3366;
+        }
+
+        .beneficiary-info strong {
+            color: #ff3366;
+        }
+
+        /* FORMULAIRE */
+        .ticket-form {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            border: 2px solid #eaeaea;
+        }
+
+        .form-title {
+            color: #0a1d4a;
+            margin-bottom: 20px;
+            font-size: 22px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #0a1d4a;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: #0a1d4a;
+            outline: none;
+        }
+
+        .price-display {
+            background: #0a1d4a;
+            color: white;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        .btn-submit {
+            background: #0a1d4a;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background: #102b6b;
+        }
+
+        .btn-back {
+            background: #0a1d4a;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: #102b6b;
+        }
+
+        /* MESSAGE DE CONFIRMATION */
+        .confirmation-message {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* FOOTER */
+        footer {
+            padding: 25px;
+            text-align: center;
+            background-color: #0a1d4a;
+            color: white;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="logo-container">
+            <div class="logo-image">🎮</div>
+            <div class="logo-text">Play4Solidarity</div>
+        </div>
+        <nav>
+            <a href="#" onclick="showPage('home')">Home</a>
+            <a href="#" onclick="showPage('home')">Tournaments & Events</a>
+            <a href="#" class="contact-btn">Contact Us</a>
+            <a href="#">About Us</a>
+            <a href="#">Missions</a>
+            <a href="#">Sponsor Donations</a>
+            <a href="#">Profile</a>
+        </nav>
+    </header>
+
+    <!-- PAGE PRINCIPALE -->
+    <div id="home" class="page active">
+        <h1>Games & Tournaments</h1>
+        <div class="cards-container">
+            <!-- CARD 1: Fortnite -->
+            <div class="card" onclick="showTournamentDetail('fortnite')">
+                <div class="card-img-container">
+                    <img src="../tournoi/tr1.jpg" alt="Fortnite Tournament" onerror="showPlaceholder(this)">
+                    <div class="img-placeholder" style="display: none;">
+                        <span style="font-size: 24px; margin-bottom: 10px;">🎯</span>
+                        FORTNITE TOURNAMENT
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>Fortnite Battle Royale Tournament</h3>
+                    <p class="date">2025‑12-10 — Monastir Gaming Arena</p>
+                    <p class="description">A 100‑player solo battle‑royale tournament in Fortnite. Compete to survive and win.</p>
+                    <p class="price">20.00 TND</p>
+                    <p class="benef">Beneficiary: SOS Children's Villages</p>
+                    <div class="btn-details">Details / Buy</div>
+                </div>
+            </div>
+
+            <!-- CARD 2: League of Legends -->
+            <div class="card" onclick="showTournamentDetail('lol')">
+                <div class="card-img-container">
+                    <img src="../tournoi/tr2.jpg" alt="League of Legends Tournament" onerror="showPlaceholder(this)">
+                    <div class="img-placeholder" style="display: none;">
+                        <span style="font-size: 24px; margin-bottom: 10px;">⚔</span>
+                        LEAGUE OF LEGENDS
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>League of Legends Championship</h3>
+                    <p class="date">2025‑12-15 — Dkhila E‑Sports Center</p>
+                    <p class="description">Team-based MOBA tournament. Show your strategy skills in League of Legends.</p>
+                    <p class="price">15.00 TND</p>
+                    <p class="benef">Association: Jeunes Leaders</p>
+                    <div class="btn-details">Details / Buy</div>
+                </div>
+            </div>
+
+            <!-- CARD 3: Counter‑Strike -->
+            <div class="card" onclick="showTournamentDetail('csgo')">
+                <div class="card-img-container">
+                    <img src="../tournoi/tr3.jpg" alt="Counter-Strike Tournament" onerror="showPlaceholder(this)">
+                    <div class="img-placeholder" style="display: none;">
+                        <span style="font-size: 24px; margin-bottom: 10px;">🔫</span>
+                        COUNTER-STRIKE
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>CS:GO Global Assault</h3>
+                    <p class="date">2026‑01-05 — Monastir LAN Hub</p>
+                    <p class="description">Classic counter‑strike style tournament. Teams compete with precision and tactics.</p>
+                    <p class="price">25.00 TND</p>
+                    <p class="benef">Beneficiary: Local Youth Fund</p>
+                    <div class="btn-details">Details / Buy</div>
+                </div>
+            </div>
+
+            <!-- CARD 4: Apex Legends -->
+            <div class="card" onclick="showTournamentDetail('apex')">
+                <div class="card-img-container">
+                    <img src="../tournoi/tr4.jpg" alt="Apex Legends Tournament" onerror="showPlaceholder(this)">
+                    <div class="img-placeholder" style="display: none;">
+                        <span style="font-size: 24px; margin-bottom: 10px;">🪂</span>
+                        APEX LEGENDS
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>Apex Legends Drop Zone</h3>
+                    <p class="date">2025‑12-20 — E‑Sports Arena Monastir</p>
+                    <p class="description">Trios battle‑royale action in the zone. Jump, loot and fight to survive.</p>
+                    <p class="price">30.00 TND</p>
+                    <p class="benef">Beneficiary: Monastir Children's Hospital</p>
+                    <div class="btn-details">Details / Buy</div>
+                </div>
+            </div>
+
+            <!-- CARD 5: FIFA -->
+            <div class="card" onclick="showTournamentDetail('fifa')">
+                <div class="card-img-container">
+                    <img src="../tournoi/tr5.jpg" alt="FIFA Tournament" onerror="showPlaceholder(this)">
+                    <div class="img-placeholder" style="display: none;">
+                        <span style="font-size: 24px; margin-bottom: 10px;">⚽</span>
+                        FIFA e‑LEAGUE
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>FIFA e‑League</h3>
+                    <p class="date">2026‑01-10 — Co‑working Monastir</p>
+                    <p class="description">1v1 football simulation tournament. Virtual soccer matches on FIFA.</p>
+                    <p class="price">10.00 TND</p>
+                    <p class="benef">Association: Game Lovers Club</p>
+                    <div class="btn-details">Details / Buy</div>
+                </div>
+            </div>
+
+            <!-- CARD 6: Dota 2 -->
+            <div class="card" onclick="showTournamentDetail('dota')">
+                <div class="card-img-container">
+                    <img src="../tournoi/tr6.jpg" alt="Dota 2 Tournament" onerror="showPlaceholder(this)">
+                    <div class="img-placeholder" style="display: none;">
+                        <span style="font-size: 24px; margin-bottom: 10px;">🐉</span>
+                        DOTA 2
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3>Dota 2 The International Night</h3>
+                    <p class="date">2025‑12-25 — University of Monastir</p>
+                    <p class="description">MOBA tournament in a strategy‑game setting. Form your 5‑player team and battle.</p>
+                    <p class="price">18.00 TND</p>
+                    <p class="benef">Maison de la Francophonie</p>
+                    <div class="btn-details">Details / Buy</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGES DE DÉTAIL DES TOURNOIS -->
+    <!-- Fortnite Detail Page -->
+    <div id="fortnite-detail" class="page">
+        <div class="tournament-detail">
+            <button class="btn-back" onclick="showPage('home')">← Back to Tournaments</button>
+            <div class="detail-header">
+                <h2>Fortnite Battle Royale Tournament</h2>
+                <p class="detail-date">2025‑12-10 — Monastir Gaming Arena</p>
+            </div>
+            <div class="detail-content">
+                <div class="detail-description">
+                    <p>A 100‑player solo battle‑royale tournament in Fortnite. Compete to survive and win the championship. This tournament features intense gameplay, strategic building, and fast-paced combat action.</p>
+                </div>
+                <div class="beneficiary-info">
+                    <strong>Beneficiary Information:</strong><br>
+                    SOS Children's Villages — 50% of entry fees go to support children in need through educational programs and healthcare initiatives.
+                </div>
+                <div class="ticket-form">
+                    <h3 class="form-title">Buy Ticket</h3>
+                    <div class="price-display">
+                        20.00 TND
+                    </div>
+                    <form id="fortnite-form">
+                        <div class="form-group">
+                            <label for="fortnite-name">Your Name</label>
+                            <input type="text" id="fortnite-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fortnite-email">Email</label>
+                            <input type="email" id="fortnite-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fortnite-phone">Phone</label>
+                            <input type="tel" id="fortnite-phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fortnite-team">Team Name (Optional)</label>
+                            <input type="text" id="fortnite-team" name="team">
+                        </div>
+                        <div class="form-group">
+                            <label for="fortnite-city">City</label>
+                            <select id="fortnite-city" name="city" required>
+                                <option value="">Select your city</option>
+                                <option value="monastir">Monastir</option>
+                                <option value="tunis">Tunis</option>
+                                <option value="sousse">Sousse</option>
+                                <option value="sfax">Sfax</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-submit">Purchase Ticket - 20.00 TND</button>
+                    </form>
+                    <div id="fortnite-confirmation" class="confirmation-message">
+                        🎉 Merci pour votre achat ! Vous recevrez un email de confirmation sous peu.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- League of Legends Detail Page -->
+    <div id="lol-detail" class="page">
+        <div class="tournament-detail">
+            <button class="btn-back" onclick="showPage('home')">← Back to Tournaments</button>
+            <div class="detail-header">
+                <h2>League of Legends Championship</h2>
+                <p class="detail-date">2025‑12-15 — Dkhila E‑Sports Center</p>
+            </div>
+            <div class="detail-content">
+                <div class="detail-description">
+                    <p>Team-based MOBA tournament. Show your strategy skills in League of Legends. Form your team of 5 players and compete in this exciting championship featuring multiple rounds and epic battles.</p>
+                </div>
+                <div class="beneficiary-info">
+                    <strong>Beneficiary Information:</strong><br>
+                    Association: Jeunes Leaders — 40% of proceeds support youth leadership development programs and educational initiatives.
+                </div>
+                <div class="ticket-form">
+                    <h3 class="form-title">Buy Ticket</h3>
+                    <div class="price-display">
+                        15.00 TND
+                    </div>
+                    <form id="lol-form">
+                        <div class="form-group">
+                            <label for="lol-name">Your Name</label>
+                            <input type="text" id="lol-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lol-email">Email</label>
+                            <input type="email" id="lol-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lol-phone">Phone</label>
+                            <input type="tel" id="lol-phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lol-team">Team Name (5 players)</label>
+                            <input type="text" id="lol-team" name="team" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lol-city">City</label>
+                            <select id="lol-city" name="city" required>
+                                <option value="">Select your city</option>
+                                <option value="monastir">Monastir</option>
+                                <option value="tunis">Tunis</option>
+                                <option value="sousse">Sousse</option>
+                                <option value="sfax">Sfax</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-submit">Purchase Ticket - 15.00 TND</button>
+                    </form>
+                    <div id="lol-confirmation" class="confirmation-message">
+                        🎉 Merci pour votre achat ! Vous recevrez un email de confirmation sous peu.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Counter-Strike Detail Page -->
+    <div id="csgo-detail" class="page">
+        <div class="tournament-detail">
+            <button class="btn-back" onclick="showPage('home')">← Back to Tournaments</button>
+            <div class="detail-header">
+                <h2>CS:GO Global Assault</h2>
+                <p class="detail-date">2026‑01-05 — Monastir LAN Hub</p>
+            </div>
+            <div class="detail-content">
+                <div class="detail-description">
+                    <p>Classic counter‑strike style tournament. Teams compete with precision and tactics in this intense FPS competition. Show your shooting skills and strategic thinking.</p>
+                </div>
+                <div class="beneficiary-info">
+                    <strong>Beneficiary Information:</strong><br>
+                    Local Youth Fund — 35% of entry fees support local youth sports and educational programs.
+                </div>
+                <div class="ticket-form">
+                    <h3 class="form-title">Buy Ticket</h3>
+                    <div class="price-display">
+                        25.00 TND
+                    </div>
+                    <form id="csgo-form">
+                        <div class="form-group">
+                            <label for="csgo-name">Your Name</label>
+                            <input type="text" id="csgo-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csgo-email">Email</label>
+                            <input type="email" id="csgo-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csgo-phone">Phone</label>
+                            <input type="tel" id="csgo-phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csgo-team">Team Name (5 players)</label>
+                            <input type="text" id="csgo-team" name="team" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="csgo-city">City</label>
+                            <select id="csgo-city" name="city" required>
+                                <option value="">Select your city</option>
+                                <option value="monastir">Monastir</option>
+                                <option value="tunis">Tunis</option>
+                                <option value="sousse">Sousse</option>
+                                <option value="sfax">Sfax</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-submit">Purchase Ticket - 25.00 TND</button>
+                    </form>
+                    <div id="csgo-confirmation" class="confirmation-message">
+                        🎉 Merci pour votre achat ! Vous recevrez un email de confirmation sous peu.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Apex Legends Detail Page -->
+    <div id="apex-detail" class="page">
+        <div class="tournament-detail">
+            <button class="btn-back" onclick="showPage('home')">← Back to Tournaments</button>
+            <div class="detail-header">
+                <h2>Apex Legends Drop Zone</h2>
+                <p class="detail-date">2025‑12-20 — E‑Sports Arena Monastir</p>
+            </div>
+            <div class="detail-content">
+                <div class="detail-description">
+                    <p>Trios battle‑royale action in the zone. Jump, loot and fight to survive in this fast-paced tournament featuring unique characters and abilities.</p>
+                </div>
+                <div class="beneficiary-info">
+                    <strong>Beneficiary Information:</strong><br>
+                    Monastir Children's Hospital — 45% of proceeds support medical equipment and treatment for children.
+                </div>
+                <div class="ticket-form">
+                    <h3 class="form-title">Buy Ticket</h3>
+                    <div class="price-display">
+                        30.00 TND
+                    </div>
+                    <form id="apex-form">
+                        <div class="form-group">
+                            <label for="apex-name">Your Name</label>
+                            <input type="text" id="apex-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="apex-email">Email</label>
+                            <input type="email" id="apex-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="apex-phone">Phone</label>
+                            <input type="tel" id="apex-phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="apex-team">Team Name (3 players)</label>
+                            <input type="text" id="apex-team" name="team" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="apex-city">City</label>
+                            <select id="apex-city" name="city" required>
+                                <option value="">Select your city</option>
+                                <option value="monastir">Monastir</option>
+                                <option value="tunis">Tunis</option>
+                                <option value="sousse">Sousse</option>
+                                <option value="sfax">Sfax</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-submit">Purchase Ticket - 30.00 TND</button>
+                    </form>
+                    <div id="apex-confirmation" class="confirmation-message">
+                        🎉 Merci pour votre achat ! Vous recevrez un email de confirmation sous peu.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FIFA Detail Page -->
+    <div id="fifa-detail" class="page">
+        <div class="tournament-detail">
+            <button class="btn-back" onclick="showPage('home')">← Back to Tournaments</button>
+            <div class="detail-header">
+                <h2>FIFA e‑League</h2>
+                <p class="detail-date">2026‑01-10 — Co‑working Monastir</p>
+            </div>
+            <div class="detail-content">
+                <div class="detail-description">
+                    <p>1v1 football simulation tournament. Virtual soccer matches on FIFA featuring the latest teams and players. Show your football skills in the virtual world.</p>
+                </div>
+                <div class="beneficiary-info">
+                    <strong>Beneficiary Information:</strong><br>
+                    Game Lovers Club — 30% of entry fees support local gaming communities and events.
+                </div>
+                <div class="ticket-form">
+                    <h3 class="form-title">Buy Ticket</h3>
+                    <div class="price-display">
+                        10.00 TND
+                    </div>
+                    <form id="fifa-form">
+                        <div class="form-group">
+                            <label for="fifa-name">Your Name</label>
+                            <input type="text" id="fifa-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fifa-email">Email</label>
+                            <input type="email" id="fifa-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fifa-phone">Phone</label>
+                            <input type="tel" id="fifa-phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fifa-team">Gamer Tag</label>
+                            <input type="text" id="fifa-team" name="team" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fifa-city">City</label>
+                            <select id="fifa-city" name="city" required>
+                                <option value="">Select your city</option>
+                                <option value="monastir">Monastir</option>
+                                <option value="tunis">Tunis</option>
+                                <option value="sousse">Sousse</option>
+                                <option value="sfax">Sfax</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-submit">Purchase Ticket - 10.00 TND</button>
+                    </form>
+                    <div id="fifa-confirmation" class="confirmation-message">
+                        🎉 Merci pour votre achat ! Vous recevrez un email de confirmation sous peu.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dota 2 Detail Page -->
+    <div id="dota-detail" class="page">
+        <div class="tournament-detail">
+            <button class="btn-back" onclick="showPage('home')">← Back to Tournaments</button>
+            <div class="detail-header">
+                <h2>Dota 2 The International Night</h2>
+                <p class="detail-date">2025‑12-25 — University of Monastir</p>
+            </div>
+            <div class="detail-content">
+                <div class="detail-description">
+                    <p>MOBA tournament in a strategy‑game setting. Form your 5‑player team and battle in this epic Dota 2 competition featuring complex strategies and team coordination.</p>
+                </div>
+                <div class="beneficiary-info">
+                    <strong>Beneficiary Information:</strong><br>
+                    Maison de la Francophonie — 40% of proceeds support cultural exchange and language programs.
+                </div>
+                <div class="ticket-form">
+                    <h3 class="form-title">Buy Ticket</h3>
+                    <div class="price-display">
+                        18.00 TND
+                    </div>
+                    <form id="dota-form">
+                        <div class="form-group">
+                            <label for="dota-name">Your Name</label>
+                            <input type="text" id="dota-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dota-email">Email</label>
+                            <input type="email" id="dota-email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dota-phone">Phone</label>
+                            <input type="tel" id="dota-phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dota-team">Team Name (5 players)</label>
+                            <input type="text" id="dota-team" name="team" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dota-city">City</label>
+                            <select id="dota-city" name="city" required>
+                                <option value="">Select your city</option>
+                                <option value="monastir">Monastir</option>
+                                <option value="tunis">Tunis</option>
+                                <option value="sousse">Sousse</option>
+                                <option value="sfax">Sfax</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn-submit">Purchase Ticket - 18.00 TND</button>
+                    </form>
+                    <div id="dota-confirmation" class="confirmation-message">
+                        🎉 Merci pour votre achat ! Vous recevrez un email de confirmation sous peu.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        © 2025 Play4Solidarity — All rights reserved.
+    </footer>
+
+    <script>
+        // FONCTIONS DE NAVIGATION
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+        }
+
+        function showTournamentDetail(tournament) {
+            showPage(tournament + '-detail');
+        }
+
+        function showPlaceholder(img) {
+            img.style.display = 'none';
+            const placeholder = img.nextElementSibling;
+            if (placeholder && placeholder.classList.contains('img-placeholder')) {
+                placeholder.style.display = 'flex';
+            }
+        }
+
+        // GESTION DES FORMULAIRES POUR TOUS LES JEUX
+        document.addEventListener('DOMContentLoaded', function() {
+            // Fonction générique pour gérer les formulaires
+            function setupForm(formId, confirmationId) {
+                const form = document.getElementById(formId);
+                const confirmation = document.getElementById(confirmationId);
+                if (form && confirmation) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        // Afficher le message de confirmation
+                        confirmation.style.display = 'block';
+                        // Cacher le formulaire
+                        form.style.display = 'none';
+                        // Optionnel: Rediriger après 3 secondes
+                        setTimeout(() => {
+                            showPage('home');
+                        }, 3000);
+                    });
+                }
+            }
+
+            // Configurer tous les formulaires
+            setupForm('fortnite-form', 'fortnite-confirmation');
+            setupForm('lol-form', 'lol-confirmation');
+            setupForm('csgo-form', 'csgo-confirmation');
+            setupForm('apex-form', 'apex-confirmation');
+            setupForm('fifa-form', 'fifa-confirmation');
+            setupForm('dota-form', 'dota-confirmation');
+
+            // Gestion des erreurs d'images
+            const images = document.querySelectorAll('.card img');
+            images.forEach(img => {
+                img.onerror = function() {
+                    showPlaceholder(this);
+                };
+            });
+        });
+    </script>
+</body>
+</html>
