@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register - Play4Solidarity</title>
+
+<style>
+/* GLOBAL PAGE STYLE */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff0f6;
+}
+
+/* NAVBAR STYLE */
+.p4s-navbar {
+    background: linear-gradient(180deg,#0d2a59,#0f2b5d);
+    color: #fff;
+    padding: 10px 24px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.p4s-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%; /* FULL WIDTH */
+}
+
+/* LEFT: LOGO + NAME */
+.p4s-brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.p4s-brand img {
+    height: 40px;
+    width: auto;
+}
+
+.p4s-brand h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.p4s-brand span {
+    font-size: 13px;
+    color: #ffd6e8;
+    display: block;
+}
+
+/* RIGHT NAV */
+.p4s-nav {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+
+.p4s-nav a {
+    color: #e6eefb;
+    text-decoration: none;
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+/* Pink Hover Like Button */
+.p4s-nav a:hover {
+    background: #ff4f88;
+    color: #fff;
+}
+
+.p4s-cta {
+    background: #ff4f88;
+    color: #fff !important;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+/* REGISTER BOX */
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    width: 350px;
+    text-align: center;
+    margin: 130px auto 0 auto; /* Push below navbar */
+}
+
+.container h1 { color: #0b1d51; margin-bottom: 15px; }
+.container p.tagline { color: #e75480; margin-bottom: 20px; font-weight: bold; }
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #fcd5ce;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0b1d51;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover { background-color: #e75480; }
+
+p.login-link { margin-top: 15px; color: #0b1d51; }
+p.login-link a { color: #e75480; text-decoration: none; font-weight: bold; }
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header>
+  <nav class="p4s-navbar">
+    <div class="p4s-container">
+
+      <!-- LEFT: LOGO + TITLE + SLOGAN -->
+      <div class="p4s-brand">
+        <img src="logo.png" alt="Play4Solidarity Logo">
+        <div>
+          <h1>Play4Solidarity</h1>
+          <span>By Game For Change</span>
+        </div>
+      </div>
+
+      <!-- RIGHT NAVIGATION -->
+      <div class="p4s-nav">
+        <a href="index.html">Home</a>
+        <a href="tournaments.html">Tournaments & Events</a>
+        <a href="contact.html" class="p4s-cta">Contact Us</a>
+        <a href="about.html">About Us</a>
+        <a href="missions.html">Missions</a>
+        <a href="sponsor.html">Sponsor Donations</a>
+        <a href="profile.html">Profile</a>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+<!-- REGISTER BOX -->
+<div class="container">
+<h1>Register</h1>
+<p class="tagline">Join the solidarity gaming community!</p>
+
+<form id="registerForm">
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    
+    <label>Profile Picture</label>
+    <input type="file" id="profileImage" accept="image/*">
+
+    <button type="submit">Register</button>
+</form>
+
+<p class="login-link">
+    Already have an account? <a href="login.html">Login here</a>
+</p>
+</div>
+
+<script>
+document.getElementById('registerForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const username = document.getElementById('username').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    let profilePic = 'https://i.pravatar.cc/100?img=12'; 
+    const file = document.getElementById('profileImage').files[0];
+
+    if(file){
+        const reader = new FileReader();
+        reader.onload = function(event){
+            profilePic = event.target.result;
+            saveUser();
+        }
+        reader.readAsDataURL(file);
+    } else {
+        saveUser();
+    }
+
+    function saveUser(){
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        users.push({username, email, password, profilePic});
+        localStorage.setItem('users', JSON.stringify(users));
+        alert("Registration successful! Please login.");
+        window.location.href = 'login.html';
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - Play4Solidarity</title>
+
+<style>
+
+/* GLOBAL PAGE STYLE */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff0f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    flex-direction: column;
+}
+
+/* ==================== NAVBAR STYLE ==================== */
+.p4s-navbar{
+    font-family: Arial, Helvetica, sans-serif;
+    background: linear-gradient(180deg,#0d2a59,#0f2b5d);
+    color: #fff;
+    padding: 10px 24px;
+    width: 100%;
+    position: fixed;
+    top: 0; 
+    left: 0;
+    box-sizing: border-box;
+    z-index: 1000;
+}
+
+.p4s-container{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    width:100%;
+}
+
+.p4s-brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.p4s-brand img{
+    width:40px;
+    height:40px;
+    object-fit:cover;
+}
+
+.p4s-title-group {
+    display:flex;
+    flex-direction:column;
+    line-height:1.1;
+}
+
+.p4s-title-group h1{
+    font-size:18px;
+    margin:0;
+    font-weight:700;
+    color:#fff;
+}
+
+.p4s-title-group span{
+    font-size:12px;
+    color:#ffd6e8;
+}
+
+/* NAV LINKS */
+.p4s-nav{
+    display:flex;
+    gap:18px;
+    align-items:center;
+}
+
+.p4s-nav a{
+    color:#e6eefb;
+    text-decoration:none;
+    padding:8px 10px;
+    border-radius:6px;
+    font-size:14px;
+}
+
+.p4s-nav a:hover {
+    background: #ff4f88; /* pink hover */
+    color: white;
+}
+
+.p4s-cta {
+    background: #ff4f88; /* only default pink for profile */
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* ========== LOGIN BOX ========== */
+
+.container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+    width: 350px;
+    text-align: center;
+    margin-top: 120px;
+}
+
+.container h1 { 
+    color: #0b1d51; 
+    margin-bottom: 15px; 
+}
+.container p.tagline { 
+    color: #e75480; 
+    margin-bottom: 20px; 
+    font-weight: bold; 
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #fcd5ce;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #0b1d51;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover { 
+    background-color: #e75480; 
+}
+
+p.register-link { 
+    margin-top: 15px; 
+    color: #0b1d51; 
+}
+
+p.register-link a { 
+    color: #e75480; 
+    text-decoration: none; 
+    font-weight: bold; 
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- ==================== NAV BAR ==================== -->
+<!-- ==================== NAV BAR ==================== -->
+<header>
+  <nav class="p4s-navbar">
+    <div class="p4s-container">
+      
+      <div class="p4s-brand">
+        <img src="logo.png" alt="Play4Solidarity Logo">
+        <div class="p4s-title-group">
+            <h1>Play4Solidarity</h1>
+            <span>By Game4Change</span>
+        </div>
+      </div>
+
+      <div class="p4s-nav">
+        <a href="index.html">Home</a>
+        <a href="tournaments.html">Tournaments & Events</a>
+        <a href="contact.html">Contact Us</a>
+        <a href="about.html">About Us</a>
+        <a href="missions.html">Missions</a>
+
+        <!-- Profile still highlighted in pink -->
+        <a href="profile.html" class="p4s-cta">Profile</a>
+      </div>
+
+    </div>
+  </nav>
+</header>
+
+
+<!-- ================= END NAV BAR ================= -->
+
+<div class="container">
+<h1>Login</h1>
+<p class="tagline">Welcome back! Please login.</p>
+
+<form id="loginForm">
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+</form>
+
+<p class="register-link">
+    Don't have an account? <a href="register.html">Register here</a>
+</p>
+</div>
+
+<script>
+document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+
+    const users = JSON.parse(localStorage.getItem('users')) || [];
+    const user = users.find(u => u.email === email && u.password === password);
+
+    if(user){
+        localStorage.setItem('currentUser', JSON.stringify({
+            username: user.username,
+            email: user.email,
+            level: 'Pro',
+            profilePic: user.profilePic || 'https://i.pravatar.cc/100?img=12'
+        }));
+        window.location.href = 'player_dashboard.html';
+    } else {
+        alert("Invalid email or password!");
+    }
+});
+</script>
+
+</body>
+</html>

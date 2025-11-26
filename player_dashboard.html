@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Player Dashboard - Play4Solidarity</title>
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #fff0f6;
+}
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background-color: #0b1d51;
+    color: #f5d0e0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 20px;
+}
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    color: #e75480;
+}
+.sidebar a {
+    display: block;
+    padding: 12px;
+    margin: 8px 0;
+    color: #f5d0e0;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+.sidebar a:hover, .sidebar a.active {
+    background-color: #e75480;
+    color: #ffffff;
+}
+.content {
+    margin-left: 270px;
+    padding: 30px;
+}
+h1, h2 { margin-bottom: 20px; color: #0b1d51; }
+.card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+.profile-pic {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto 15px auto;
+    object-fit: cover;
+    border: 3px solid #0b1d51;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+th {
+    background: #e75480;
+    color: #ffffff;
+    text-align: left;
+    padding: 12px;
+}
+td {
+    padding: 12px;
+    border-bottom: 1px solid #fcd5ce;
+    color: #0b1d51;
+}
+tr:hover { background-color: #ffe6f0; }
+button {
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 5px;
+}
+button.primary { background-color: #0b1d51; }
+button.edit { background-color: #ff7f50; }
+button.delete { background-color: #f72585; }
+form input, form select {
+    padding: 8px;
+    margin: 8px 0;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #fcd5ce;
+}
+form label { font-weight: bold; }
+form button { margin-top: 10px; background-color: #0b1d51; color: white; cursor: pointer; }
+.badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    min-width: 60px;
+}
+.badge-win { background-color: #0b1d51; }
+.badge-lose { background-color: #e75480; }
+.badge-draw { background-color: #ff7f50; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+<h2>Player Dashboard</h2>
+<a href="#" class="active">Home</a>
+<a href="#my-stats">My Stats</a>
+<a href="#recent-games">Recent Games</a>
+<a href="#profile">Profile</a>
+<a href="#" onclick="logout()">Logout</a>
+</div>
+
+<div class="content">
+<h1>Welcome, <span id="statsName">Player</span>!</h1>
+
+<!-- Stats Section -->
+<div class="card" id="my-stats">
+<img id="statsPic" src="https://i.pravatar.cc/100?img=12" alt="Profile Picture" class="profile-pic">
+<h2>My Stats</h2>
+<p><strong>Username:</strong> <span id="statsName2">Alaa</span></p>
+<p><strong>Email:</strong> <span id="statsEmail">alaa@example.com</span></p>
+<p><strong>Level:</strong> <span id="statsLevel">Pro</span></p>
+<p><strong>Total Score:</strong> 1245 pts</p>
+<p><strong>Rank:</strong> #42</p>
+</div>
+
+<!-- Recent Games -->
+<div class="card" id="recent-games">
+<h2>Recent Games</h2>
+<table id="gamesTable">
+<tr>
+<th>Game</th>
+<th>Date</th>
+<th>Score</th>
+<th>Result</th>
+</tr>
+</table>
+</div>
+
+<!-- Profile Form -->
+<div class="card" id="profile">
+<h2>Edit Profile</h2>
+<img id="profilePic" src="https://i.pravatar.cc/100?img=12" alt="Profile Picture" class="profile-pic">
+<form id="profileForm">
+<label>Change Profile Picture URL</label>
+<input type="text" id="profilePicInput" placeholder="Paste image URL">
+<label>Or Upload Profile Picture</label>
+<input type="file" id="profileImageInput" accept="image/*">
+<label>Username</label>
+<input type="text" id="username" value="Alaa">
+<label>Email</label>
+<input type="email" id="email" value="alaa@example.com">
+<label>Level</label>
+<select id="level">
+<option>Beginner</option>
+<option>Intermediate</option>
+<option selected>Pro</option>
+<option>Expert</option>
+</select>
+<button type="submit">Save Changes</button>
+</form>
+</div>
+
+</div>
+
+<script>
+// --- Load current user ---
+let currentUser = JSON.parse(localStorage.getItem('currentUser')) || {
+    username: 'Alaa',
+    email: 'alaa@example.com',
+    level: 'Pro',
+    profilePic: 'https://i.pravatar.cc/100?img=12'
+};
+
+// --- Fill dashboard stats ---
+function updateStats(){
+    document.getElementById('statsName').innerText = currentUser.username;
+    document.getElementById('statsName2').innerText = currentUser.username;
+    document.getElementById('statsEmail').innerText = currentUser.email;
+    document.getElementById('statsLevel').innerText = currentUser.level;
+    document.getElementById('statsPic').src = currentUser.profilePic;
+    document.getElementById('profilePic').src = currentUser.profilePic;
+    document.getElementById('username').value = currentUser.username;
+    document.getElementById('email').value = currentUser.email;
+    document.getElementById('level').value = currentUser.level;
+    document.getElementById('profilePicInput').value = currentUser.profilePic;
+}
+updateStats();
+
+// --- Sample recent games data ---
+let games = [
+{game: "Memory Challenge", date: "15/11/2025", score: 120, result: "Win"},
+{game: "Quiz Solidarity", date: "14/11/2025", score: 95, result: "Lose"},
+{game: "Speed Runner", date: "13/11/2025", score: 150, result: "Win"},
+{game: "Puzzle Quest", date: "12/11/2025", score: 110, result: "Draw"}
+];
+
+// --- Render games table ---
+function renderGames() {
+    const table = document.getElementById('gamesTable');
+    table.innerHTML = `<tr><th>Game</th><th>Date</th><th>Score</th><th>Result</th></tr>`;
+    games.forEach(g=>{
+        let row = table.insertRow();
+        row.insertCell(0).innerText = g.game;
+        row.insertCell(1).innerText = g.date;
+        row.insertCell(2).innerText = g.score;
+        let cell = row.insertCell(3);
+        let badge = document.createElement('span');
+        badge.className = 'badge ' + (g.result.toLowerCase() === 'win' ? 'badge-win' : g.result.toLowerCase() === 'lose' ? 'badge-lose' : 'badge-draw');
+        badge.innerText = g.result;
+        cell.appendChild(badge);
+    });
+}
+renderGames();
+
+// --- Save profile changes ---
+document.getElementById('profileForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    currentUser.username = document.getElementById('username').value;
+    currentUser.email = document.getElementById('email').value;
+    currentUser.level = document.getElementById('level').value;
+    currentUser.profilePic = document.getElementById('profilePicInput').value || currentUser.profilePic;
+    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+    updateStats();
+    alert("Profile updated successfully!");
+});
+
+// --- Live profile picture upload ---
+document.getElementById('profileImageInput').addEventListener('change', function(e){
+    const file = e.target.files[0];
+    if(file){
+        const reader = new FileReader();
+        reader.onload = function(event){
+            currentUser.profilePic = event.target.result;
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            updateStats();
+        }
+        reader.readAsDataURL(file);
+    }
+});
+
+// --- Logout function ---
+function logout(){
+    localStorage.removeItem('currentUser');
+    window.location.href = 'login.html';
+}
+</script>
+
+</body>
+</html>
