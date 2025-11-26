@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Play4Solidarity — Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet" />
+    <style>
+        /* Reset and base */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #FBE8EF;
+            color: #0B1A54;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Navbar */
+        nav.navbar {
+            background-color: #0B1A54;
+            color: white;
+            padding: 16px 32px;
+            font-weight: 600;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            user-select: none;
+        }
+
+        nav.navbar img.logo {
+            height: 28px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        /* Main container */
+        main {
+            max-width: 900px;
+            margin: 40px auto 80px auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px 40px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
+        }
+
+        main h1 {
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-weight: 700;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        /* Top bar with search + add button */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        input#searchInput {
+            flex-grow: 1;
+            min-width: 180px;
+            padding: 10px 14px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline-color: #FF4C7B;
+        }
+
+        button#addSponsorBtn {
+            background-color: #0B1A54;
+            color: white;
+            border: none;
+            padding: 11px 22px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.3s ease;
+        }
+
+        button#addSponsorBtn:hover {
+            background-color: #152b7c;
+        }
+
+        /* Table styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 12px 15px;
+        }
+
+        th {
+            background-color: #0B1A54;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+        }
+
+        tr:not(:last-child) {
+            border-bottom: 1px solid #ddd;
+        }
+
+        td.actions {
+            white-space: nowrap;
+        }
+
+        /* Buttons in table */
+        button.action-btn {
+            background-color: #FF4C7B;
+            border: none;
+            color: white;
+            padding: 7px 14px;
+            margin-right: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        button.action-btn.delete-btn {
+            background-color: #e5395a;
+        }
+
+        button.action-btn:hover {
+            filter: brightness(90%);
+        }
+
+        /* Table footer total */
+        tfoot tr td {
+            font-weight: 700;
+            border-top: 2px solid #ddd;
+            font-size: 16px;
+        }
+
+        /* Modal overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(11, 26, 84, 0.6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Modal content */
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 30px 30px 25px 30px;
+            max-width: 420px;
+            width: 100%;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .modal h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            color: #0B1A54;
+            font-weight: 700;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        .modal form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .modal label {
+            font-weight: 600;
+            font-size: 14px;
+            color: #0B1A54;
+        }
+
+        .modal input[type="text"],
+        .modal input[type="email"],
+        .modal input[type="number"] {
+            padding: 11px 14px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline-color: #FF4C7B;
+        }
+
+        /* Remove number input spin buttons */
+        .modal input[type="number"]::-webkit-inner-spin-button,
+        .modal input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        /* Modal buttons container */
+        .modal .buttons {
+            margin-top: 25px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .modal button {
+            cursor: pointer;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            font-size: 15px;
+            padding: 11px 22px;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal button.cancel-btn {
+            background-color: #ccc;
+            color: #555;
+        }
+
+        .modal button.cancel-btn:hover {
+            background-color: #b3b3b3;
+        }
+
+        .modal button.submit-btn {
+            background-color: #FF4C7B;
+            color: white;
+        }
+
+        .modal button.submit-btn:hover {
+            background-color: #e6396d;
+        }
+
+        /* Responsive for small screens */
+        @media (max-width: 560px) {
+            main {
+                margin: 20px 12px 50px 12px;
+                padding: 25px 20px;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            input#searchInput {
+                width: 100%;
+                min-width: auto;
+            }
+
+            button#addSponsorBtn {
+                width: 100%;
+            }
+
+            td.actions button {
+                margin: 5px 6px 0 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <img src="logo.png" alt="Play4Solidarity Logo" class="logo" />
+        Play4Solidarity — Admin Dashboard
+    </nav>
+
+    <main>
+        <h1>All Sponsors</h1>
+
+        <div class="top-bar">
+            <input type="search" id="searchInput" placeholder="Search sponsor..." aria-label="Search sponsor" />
+            <button id="addSponsorBtn" aria-label="Add new sponsor">Add Sponsor</button>
+        </div>
+
+        <table aria-describedby="totalDonations">
+            <thead>
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Amount (DT)</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="sponsorTableBody">
+                <!-- sponsors will be dynamically inserted here -->
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">Total Donations</td>
+                    <td id="totalDonations" colspan="2" aria-live="polite"></td>
+                </tr>
+            </tfoot>
+        </table>
+    </main>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal">
+            <h2 id="modalTitle">Add Sponsor</h2>
+            <form id="sponsorForm" novalidate>
+                <label for="sponsorName">Name</label>
+                <input type="text" id="sponsorName" name="sponsorName" placeholder="Sponsor name" required autocomplete="off" />
+
+                <label for="sponsorEmail">Email</label>
+                <input type="email" id="sponsorEmail" name="sponsorEmail" placeholder="Sponsor email" required autocomplete="off" />
+
+                <label for="sponsorAmount">Amount (DT)</label>
+                <input type="number" id="sponsorAmount" name="sponsorAmount" placeholder="Donation amount" min="1" step="1" required />
+
+                <div class="buttons">
+                    <button type="button" class="cancel-btn" id="cancelBtn">Cancel</button>
+                    <button type="submit" class="submit-btn">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        (() => {
+            // localStorage key
+            const STORAGE_KEY = 'play4solidarity_sponsors';
+
+            // Tunisian sponsors initial data
+            const initialSponsors = [
+                { name: "Société Tunisienne de Boissons", email: "contact@stb.com.tn", amount: 2500 },
+                { name: "Entreprise Sportive de Tunis", email: "info@estunis.tn", amount: 1800 },
+                { name: "Agence Carthage Marketing", email: "contact@carthagemarketing.tn", amount: 3200 },
+                { name: "TechnoMed S.A.R.L.", email: "support@technomed.tn", amount: 1500 },
+                { name: "Banque de Tunisie", email: "service@bt.com.tn", amount: 5000 }
+            ];
+
+            // Elements
+            const sponsorTableBody = document.getElementById('sponsorTableBody');
+            const totalDonationsEl = document.getElementById('totalDonations');
+            const searchInput = document.getElementById('searchInput');
+            const addSponsorBtn = document.getElementById('addSponsorBtn');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const sponsorForm = document.getElementById('sponsorForm');
+            const modalTitle = document.getElementById('modalTitle');
+            const sponsorNameInput = document.getElementById('sponsorName');
+            const sponsorEmailInput = document.getElementById('sponsorEmail');
+            const sponsorAmountInput = document.getElementById('sponsorAmount');
+            const cancelBtn = document.getElementById('cancelBtn');
+
+            let sponsors = [];
+            let editingIndex = null;
+
+            // Load sponsors from localStorage or initial
+            function loadSponsors() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        if (Array.isArray(parsed)) {
+                            sponsors = parsed;
+                            return;
+                        }
+                    } catch {
+                        // ignore error
+                    }
+                }
+                sponsors = [...initialSponsors];
+                saveSponsors();
+            }
+
+            // Save sponsors to localStorage
+            function saveSponsors() {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(sponsors));
+            }
+
+            // Format amount as Tunisian Dinar localized
+            function formatAmount(amount) {
+                return amount.toLocaleString('fr-TN') + ' DT';
+            }
+
+            // Render sponsor table filtered by name
+            function renderTable(filter = '') {
+                sponsorTableBody.innerHTML = '';
+
+                const filteredSponsors = sponsors.filter(s =>
+                    s.name.toLowerCase().includes(filter.toLowerCase())
+                );
+
+                if (filteredSponsors.length === 0) {
+                    sponsorTableBody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:#888;">No sponsors found.</td></tr>`;
+                    totalDonationsEl.textContent = '0 DT';
+                    return;
+                }
+
+                let total = 0;
+
+                filteredSponsors.forEach((sponsor, index) => {
+                    total += sponsor.amount;
+
+                    const tr = document.createElement('tr');
+
+                    const tdName = document.createElement('td');
+                    tdName.textContent = sponsor.name;
+
+                    const tdEmail = document.createElement('td');
+                    tdEmail.textContent = sponsor.email;
+
+                    const tdAmount = document.createElement('td');
+                    tdAmount.textContent = formatAmount(sponsor.amount);
+
+                    const tdActions = document.createElement('td');
+                    tdActions.classList.add('actions');
+
+                    const editBtn = document.createElement('button');
+                    editBtn.textContent = 'Edit';
+                    editBtn.className = 'action-btn edit-btn';
+                    editBtn.addEventListener('click', () => openEditModal(sponsors.indexOf(sponsor)));
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.className = 'action-btn delete-btn';
+                    deleteBtn.addEventListener('click', () => {
+                        if (confirm(`Delete sponsor "${sponsor.name}"?`)) {
+                            const idx = sponsors.indexOf(sponsor);
+                            if (idx > -1) {
+                                sponsors.splice(idx, 1);
+                                saveSponsors();
+                                renderTable(searchInput.value);
+                            }
+                        }
+                    });
+
+                    tdActions.appendChild(editBtn);
+                    tdActions.appendChild(deleteBtn);
+
+                    tr.appendChild(tdName);
+                    tr.appendChild(tdEmail);
+                    tr.appendChild(tdAmount);
+                    tr.appendChild(tdActions);
+
+                    sponsorTableBody.appendChild(tr);
+                });
+
+                totalDonationsEl.textContent = formatAmount(total);
+            }
+
+            // Open Add Modal
+            function openAddModal() {
+                editingIndex = null;
+                modalTitle.textContent = 'Add Sponsor';
+                sponsorForm.reset();
+                modalOverlay.setAttribute('aria-hidden', 'false');
+                modalOverlay.classList.add('active');
+                sponsorNameInput.focus();
+            }
+
+            // Open Edit Modal with sponsor data
+            function openEditModal(index) {
+                editingIndex = index;
+                const sponsor = sponsors[index];
+                modalTitle.textContent = 'Edit Sponsor';
+                sponsorNameInput.value = sponsor.name;
+                sponsorEmailInput.value = sponsor.email;
+                sponsorAmountInput.value = sponsor.amount;
+                modalOverlay.setAttribute('aria-hidden', 'false');
+                modalOverlay.classList.add('active');
+                sponsorNameInput.focus();
+            }
+
+            // Close modal
+            function closeModal() {
+                modalOverlay.setAttribute('aria-hidden', 'true');
+                modalOverlay.classList.remove('active');
+                editingIndex = null;
+                sponsorForm.reset();
+            }
+
+            // Handle form submit
+            sponsorForm.addEventListener('submit', e => {
+                e.preventDefault();
+
+                const name = sponsorNameInput.value.trim();
+                const email = sponsorEmailInput.value.trim();
+                const amountRaw = sponsorAmountInput.value.trim();
+                const amount = Number(amountRaw);
+
+                if (!name || !email || !amount || amount < 1) {
+                    alert('Please fill out all fields with valid information.');
+                    return;
+                }
+
+                if (editingIndex !== null) {
+                    // update sponsor
+                    sponsors[editingIndex] = { name, email, amount };
+                } else {
+                    // add new sponsor
+                    sponsors.push({ name, email, amount });
+                }
+
+                saveSponsors();
+                renderTable(searchInput.value);
+                closeModal();
+            });
+
+            // Cancel button on modal
+            cancelBtn.addEventListener('click', closeModal);
+
+            // Close modal on overlay click
+            modalOverlay.addEventListener('click', e => {
+                if (e.target === modalOverlay) {
+                    closeModal();
+                }
+            });
+
+            // Add Sponsor button
+            addSponsorBtn.addEventListener('click', openAddModal);
+
+            // Search input filtering
+            searchInput.addEventListener('input', e => {
+                renderTable(e.target.value);
+            });
+
+            // Initialize
+            loadSponsors();
+            renderTable();
+        })();
+    </script>
+</body>
+
+</html>
