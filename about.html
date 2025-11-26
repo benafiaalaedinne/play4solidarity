@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>About Us — Play4Solidarity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FBE8EF, #FFE6F2);
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #0B1A54;
+            padding: 12px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar img {
+            height: 40px;
+        }
+
+        .navbar-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #FBE8EF;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #FBE8EF;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: #FF4C7B;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background-color: #FF4C7B;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .nav-links a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        h2 {
+            color: #0B1A54;
+            font-size: 36px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            color: #FF4C7B;
+            font-size: 18px;
+            margin-bottom: 50px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Team Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        @media (max-width: 1000px) {
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 650px) {
+            .team-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Team Card */
+        .team-card {
+            background: linear-gradient(145deg, #ffe6f2, #fff0f8);
+            border-radius: 25px;
+            text-align: center;
+            padding: 30px 20px;
+            box-shadow: 0px 10px 30px rgba(255, 76, 123, 0.2);
+            transition: transform 0.5s ease, box-shadow 0.5s ease, background 0.5s ease;
+        }
+
+        .team-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0px 25px 50px rgba(255, 76, 123, 0.35);
+            background: linear-gradient(145deg, #fff0f8, #ffe6f2);
+        }
+
+        .team-card img {
+            width: 130px;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            border: 4px solid #FF4C7B;
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        .team-card:hover img {
+            transform: scale(1.08) rotate(2deg);
+            box-shadow: 0px 10px 25px rgba(255, 76, 123, 0.4);
+        }
+
+        .team-card h3 {
+            margin: 10px 0 5px 0;
+            font-size: 22px;
+            color: #0B1A54;
+            transition: color 0.3s ease;
+        }
+
+        .team-card:hover h3 {
+            color: #FF4C7B;
+        }
+
+        .team-card p.role {
+            font-weight: 600;
+            color: #FF4C7B;
+            margin-bottom: 12px;
+        }
+
+        .team-card p.description {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo-title">
+            <img src="logo.png" alt="logo">
+            <span class="navbar-title">Play4Solidarity</span>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#">Tournaments & Events</a>
+            <a href="contact.html">Contact Us</a>
+            <a href="#" class="active">About Us</a>
+            <a href="#">Missions</a>
+            <a href="sponsor_dashboard.html">Sponsor Donations</a>
+            <a href="#">Profile</a>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h2>Meet Our Team</h2>
+        <p class="subtitle">The passionate gamers and organizers behind Play4Solidarity</p>
+
+        <div class="team-grid">
+            <div class="team-card">
+                <img src="amal.png" alt="Amal Jamli">
+                <h3>Amal Jamli</h3>
+                <p class="role">Project Manager</p>
+                <p class="description">Amal coordinates all our activities, ensuring the team works together smoothly and our missions are achieved efficiently.</p>
+            </div>
+
+            <div class="team-card">
+                <img src="alaeddine.png" alt="Alaeddine Ben Afia">
+                <h3>Alaeddine Ben Afia</h3>
+                <p class="role">Lead Developer</p>
+                <p class="description">Alaeddine designs and maintains our digital platforms, bringing the vision of Play4Solidarity to life online.</p>
+            </div>
+
+            <div class="team-card">
+                <img src="elaa.png" alt="Elaa Matouk">
+                <h3>Elaa Matouk</h3>
+                <p class="role">Community Manager</p>
+                <p class="description">Elaa connects with our supporters and gaming community, keeping everyone engaged and informed about our events.</p>
+            </div>
+
+            <div class="team-card">
+                <img src="ayoub.png" alt="Ayoub Bchir">
+                <h3>Ayoub Bchir</h3>
+                <p class="role">Event Coordinator</p>
+                <p class="description">Ayoub organizes tournaments and events, making sure every experience is fun, inclusive, and memorable.</p>
+            </div>
+
+            <div class="team-card">
+                <img src="mariam.png" alt="Mariam Aguir">
+                <h3>Mariam Aguir</h3>
+                <p class="role">Marketing & PR</p>
+                <p class="description">Mariam handles marketing and public relations, spreading the word about our solidarity gaming mission worldwide.</p>
+            </div>
+
+            <div class="team-card">
+                <img src="rayen.png" alt="Rayen Bizid">
+                <h3>Rayen Bizid</h3>
+                <p class="role">Technical Support</p>
+                <p class="description">Rayen ensures all technical aspects run smoothly during events and online platforms, solving any issues quickly.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

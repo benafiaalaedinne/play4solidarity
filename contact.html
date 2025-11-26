@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Contact Us — Play4Solidarity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #FBE8EF, #FFE6F2);
+            min-height: 100vh;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: #0B1A54;
+            padding: 12px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .navbar img {
+            height: 40px;
+        }
+
+        .navbar-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #FBE8EF;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: #FBE8EF;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 6px;
+            background-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: #FF4C7B;
+            color: white;
+        }
+
+        .nav-links a.active {
+            background-color: #FF4C7B;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .nav-links a {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Container */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0px 15px 35px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 25px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            color: #0B1A54;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #FF4C7B;
+            font-size: 16px;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        /* Inputs and textarea */
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            margin-bottom: 18px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #FF4C7B;
+            box-shadow: 0 0 8px rgba(255, 76, 123, 0.3);
+            outline: none;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #0B1A54, #152b7c);
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #152b7c, #0B1A54);
+            transform: translateY(-2px);
+        }
+
+        #successMessage {
+            margin-top: 20px;
+            background: #28a745;
+            padding: 12px;
+            color: white;
+            border-radius: 6px;
+            font-size: 15px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.7s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div class="logo-title">
+            <img src="logo.png" alt="logo">
+            <span class="navbar-title">Play4Solidarity</span>
+        </div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="#">Tournaments & Events</a>
+            <a href="#" class="active">Contact Us</a>
+            <a href="#">About Us</a>
+            <a href="#">Missions</a>
+            <a href="sponsor_dashboard.html">Sponsor Donations</a>
+            <a href="#">Profile</a>
+        </nav>
+    </div>
+
+    <div class="container">
+
+        <!-- Contact Form Card -->
+        <div class="card">
+            <h2>Contact Us</h2>
+            <p class="subtitle">We’d love to hear from you!</p>
+
+            <form id="contactForm" onsubmit="sendMessage(event)">
+                <input type="text" id="name" placeholder="Full Name" required>
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="text" id="subject" placeholder="Subject" required>
+                <textarea id="message" placeholder="Your Message" required></textarea>
+
+                <button class="btn">Send Message</button>
+            </form>
+
+            <div id="successMessage">Message sent successfully! Thank you ❤️</div>
+        </div>
+
+    </div>
+
+    <script>
+        function sendMessage(event) {
+            event.preventDefault();
+
+            // Optionally, you can send this via AJAX or email API
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const subject = document.getElementById("subject").value;
+            const message = document.getElementById("message").value;
+
+            console.log({ name, email, subject, message }); // For demo purposes
+
+            const msg = document.getElementById("successMessage");
+            msg.style.display = "block";
+            setTimeout(() => { msg.style.opacity = "1"; }, 50);
+            setTimeout(() => {
+                msg.style.opacity = "0";
+                setTimeout(() => { msg.style.display = "none"; }, 700);
+            }, 2000);
+
+            document.getElementById("contactForm").reset();
+        }
+    </script>
+
+</body>
+
+</html>
