@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missions Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FDEFF3; 
+            margin: 0;
+            padding: 0;
+        }
+
+        /* === NAVBAR === */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #0C1A48;
+            padding: 10px 20px;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-container img {
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+        }
+
+        .logo-container span {
+            color: white;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+
+        .nav {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav a {
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: 0.3s;
+        }
+
+        .nav .active {
+            background-color: #F45C7D;
+        }
+
+        .nav a:hover {
+            background-color: #F45C7D;
+        }
+
+        /* === CONTENT === */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+
+        /* Move header downward */
+        header {
+            color: #0C1A48;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.6rem;
+            margin-top: 20px; 
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #0C1A48;
+        }
+
+        /* === TABLE === */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 2rem;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0C1A48;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        /* Buttons */
+        button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+            transition: 0.3s;
+        }
+
+        .edit { background-color: #F45C7D; }
+        .delete { background-color: #FF6B6B; }
+
+        .edit:hover,
+        .delete:hover {
+            opacity: 0.8;
+        }
+
+        /* === FORM === */
+        form {
+            background: #fff;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #F45C7D;
+            color: #fff;
+            cursor: pointer;
+            width: auto;
+            padding: 10px 20px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #ff7693;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <div class="navbar">
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo"> <!-- Replace with your real image path -->
+            <span>Play4Solidarity</span>
+        </div>
+
+        <div class="nav">
+            <a href="#">Home</a>
+            <a href="#">Tournaments & Events</a>
+            <a href="#">Contact Us</a>
+            <a href="#">About Us</a>
+            <a href="#" class="active">Missions</a>
+            <a href="#">Sponsor Donations</a>
+            <a href="#">Profile</a>
+        </div>
+    </div>
+
+    <header>Missions Dashboard — Back Office</header>
+
+    <div class="container">
+
+        <h2>Create / Edit Mission</h2>
+
+        <form id="missionForm">
+            <input type="text" id="name" placeholder="Mission Name" required>
+            <input type="text" id="location" placeholder="Location" required>
+            <input type="date" id="date" required>
+            <input type="time" id="time" required>
+            <input type="number" id="donation" placeholder="Donation Amount ($)" required>
+            <input type="text" id="image" placeholder="Image URL" required>
+
+            <input type="submit" value="Add Mission">
+        </form>
+
+        <h2>All Missions</h2>
+
+        <table id="missionsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Donation ($)</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td>Clean Beach</td>
+                    <td>Tunis</td>
+                    <td>2025-12-01</td>
+                    <td>10:00</td>
+                    <td>200</td>
+                    <td>
+                        <button class="edit">Edit</button>
+                        <button class="delete">Delete</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Plant Trees</td>
+                    <td>Sfax</td>
+                    <td>2025-12-10</td>
+                    <td>09:00</td>
+                    <td>150</td>
+                    <td>
+                        <button class="edit">Edit</button>
+                        <button class="delete">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+<script>
+    const form = document.getElementById("missionForm");
+    const table = document.getElementById("missionsTable").querySelector("tbody");
+
+    let editRow = null;
+
+    // Handle form submit
+    form.addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const data = [
+            document.getElementById("name").value,
+            document.getElementById("location").value,
+            document.getElementById("date").value,
+            document.getElementById("time").value,
+            document.getElementById("donation").value,
+        ];
+
+        if (editRow) {
+            // Update existing row
+            for (let i = 0; i < 5; i++) {
+                editRow.children[i].textContent = data[i];
+            }
+            editRow = null;
+        } else {
+            // Add new mission row
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td>${data[0]}</td>
+                <td>${data[1]}</td>
+                <td>${data[2]}</td>
+                <td>${data[3]}</td>
+                <td>${data[4]}</td>
+                <td>
+                    <button class="edit">Edit</button>
+                    <button class="delete">Delete</button>
+                </td>`;
+            table.appendChild(newRow);
+        }
+
+        form.reset();
+    });
+
+    // Handle Edit + Delete clicks
+    table.addEventListener("click", function(e) {
+        const row = e.target.closest("tr");
+
+        if (e.target.classList.contains("delete")) {
+            row.remove();
+        }
+
+        if (e.target.classList.contains("edit")) {
+            editRow = row;
+            document.getElementById("name").value = row.children[0].textContent;
+            document.getElementById("location").value = row.children[1].textContent;
+            document.getElementById("date").value = row.children[2].textContent;
+            document.getElementById("time").value = row.children[3].textContent;
+            document.getElementById("donation").value = row.children[4].textContent;
+
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Missions</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #fdeff3, #fbe2ea, #ffe9f2);
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* =========== NAVBAR =========== */
+        .navbar {
+            background-color: #0C1A48;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: white;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-area img {
+            height: 45px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .logo-text span:first-child {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #F45C7D;
+        }
+
+        .logo-text span:last-child {
+            font-size: 1rem;
+            color: white;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 18px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: .3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links .active {
+            background-color: #F45C7D;
+        }
+
+        /* =========== LOGIN PAGE =========== */
+        #login-page {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        #login-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            width: 330px;
+            text-align: center;
+        }
+
+        #login-box input, #login-box button {
+            width: 250px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        #login-box button {
+            background-color: #0C1A48;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        /* =========== MISSIONS PAGE =========== */
+        #missions-page {
+            display: none;
+            width: 90%;
+            max-width: 1200px;
+            margin: 2rem auto;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .mission-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: .3s;
+        }
+
+        .mission-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 4px 12px rgba(244,92,125,0.4);
+        }
+
+        .mission-card img {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        .participate-btn {
+            background: #F45C7D;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: .3s;
+        }
+
+        .participate-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* =========== IMPROVED FORM =========== */
+        .apply-form {
+            display: none;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 18px;
+            margin-top: 12px;
+            opacity: 0;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+            animation: fadeSlide .4s ease;
+            transition: .3s ease;
+        }
+
+        .apply-form input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background: #fff;
+        }
+
+        .apply-form input[type="submit"] {
+            background: #F45C7D;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* SUCCESS MESSAGE */
+        .success-box {
+            background: #d4f8d4;
+            border-left: 5px solid #34a853;
+            color: #155724;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+            opacity: 0;
+            transition: .4s ease;
+        }
+
+    </style>
+
+    <script>
+        function login() {
+            const email = document.getElementById("email").value;
+            const pass = document.getElementById("password").value;
+
+            if (!email || !pass) {
+                alert("Please enter your email and password.");
+                return;
+            }
+
+            if (pass.length < 8) {
+                alert("Password must be at least 8 characters.");
+                return;
+            }
+
+            document.getElementById("login-page").style.display = "none";
+            document.getElementById("missions-page").style.display = "block";
+        }
+
+        function toggleForm(id) {
+            const form = document.getElementById(id);
+
+            if (form.style.display === "block") {
+                form.style.opacity = "0";
+                setTimeout(() => form.style.display = "none", 300);
+            } else {
+                form.style.display = "block";
+                setTimeout(() => form.style.opacity = "1", 20);
+            }
+        }
+
+        function submitForm(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const box = form.parentElement.querySelector(".success-box");
+
+            box.style.display = "block";
+            setTimeout(() => box.style.opacity = "1", 20);
+
+            form.style.opacity = "0";
+            setTimeout(() => form.style.display = "none", 600);
+
+            setTimeout(() => {
+                box.style.opacity = "0";
+                setTimeout(() => box.style.display = "none", 500);
+            }, 3000);
+        }
+    </script>
+
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="logo-area">
+        <img src="./logo.png">
+        <div class="logo-text">
+            <span>Play4Solidarity</span>
+            <span>| Game4Change</span>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Tournaments</a>
+        <a href="#">Contact</a>
+        <a href="#">About</a>
+        <a class="active" href="#">Missions</a>
+        <a href="#">Profile</a>
+    </div>
+</div>
+
+
+<!-- LOGIN PAGE -->
+<div id="login-page">
+    <div id="login-box">
+        <h2 style="color:#0C1A48;">Login</h2>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+</div>
+
+
+<!-- MISSIONS PAGE -->
+<div id="missions-page">
+    <h2 style="text-align:center; color:#0C1A48; margin-bottom:25px;">I want to participate in a mission</h2>
+
+    <div class="mission-grid">
+
+        <!-- 1 -->
+        <div class="mission-card">
+            <img src="1.png">
+            <h3>Clean the Beach</h3>
+            <p><strong>Location:</strong> La Marsa</p>
+            <p><strong>Date:</strong> 2025-12-05</p>
+            <p><strong>Hour:</strong> 09:00</p>
+            <p><strong>Donation:</strong> 120 DT</p>
+
+            <button class="participate-btn" onclick="toggleForm('form1')">Participate</button>
+
+            <div class="success-box">Application done successfully!</div>
+
+            <form id="form1" class="apply-form" onsubmit="submitForm(event)">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Phone Number" required>
+                <input type="submit" value="Apply">
+            </form>
+        </div>
+
+        <!-- 2 -->
+        <div class="mission-card">
+            <img src="2.png">
+            <h3>Planting 100 Trees</h3>
+            <p><strong>Location:</strong> Sfax</p>
+            <p><strong>Date:</strong> 2025-11-28</p>
+            <p><strong>Hour:</strong> 10:30</p>
+            <p><strong>Donation:</strong> 200 DT</p>
+
+            <button class="participate-btn" onclick="toggleForm('form2')">Participate</button>
+
+            <div class="success-box">Application done successfully!</div>
+
+            <form id="form2" class="apply-form" onsubmit="submitForm(event)">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Phone Number" required>
+                <input type="submit" value="Apply">
+            </form>
+        </div>
+
+        <!-- 3 -->
+        <div class="mission-card">
+            <img src="3.png">
+            <h3>Animal Shelter Help</h3>
+            <p><strong>Location:</strong> Ariana</p>
+            <p><strong>Date:</strong> 2025-12-15</p>
+            <p><strong>Hour:</strong> 14:00</p>
+            <p><strong>Donation:</strong> 80 DT</p>
+
+            <button class="participate-btn" onclick="toggleForm('form3')">Participate</button>
+
+            <div class="success-box">Application done successfully!</div>
+
+            <form id="form3" class="apply-form" onsubmit="submitForm(event)">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Phone Number" required>
+                <input type="submit" value="Apply">
+            </form>
+        </div>
+
+        <!-- 4 -->
+        <div class="mission-card">
+            <img src="4.png">
+            <h3>School Supplies Donation</h3>
+            <p><strong>Location:</strong> Tunis</p>
+            <p><strong>Date:</strong> 2025-10-20</p>
+            <p><strong>Hour:</strong> 11:00</p>
+            <p><strong>Donation:</strong> 60 DT</p>
+
+            <button class="participate-btn" onclick="toggleForm('form4')">Participate</button>
+
+            <div class="success-box">Application done successfully!</div>
+
+            <form id="form4" class="apply-form" onsubmit="submitForm(event)">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Phone Number" required>
+                <input type="submit" value="Apply">
+            </form>
+        </div>
+
+        <!-- 5 -->
+        <div class="mission-card">
+            <img src="5.png">
+            <h3>Park Clean-Up</h3>
+            <p><strong>Location:</strong> Bizerte</p>
+            <p><strong>Date:</strong> 2025-09-14</p>
+            <p><strong>Hour:</strong> 08:00</p>
+            <p><strong>Donation:</strong> 40 DT</p>
+
+            <button class="participate-btn" onclick="toggleForm('form5')">Participate</button>
+
+            <div class="success-box">Application done successfully!</div>
+
+            <form id="form5" class="apply-form" onsubmit="submitForm(event)">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Phone Number" required>
+                <input type="submit" value="Apply">
+            </form>
+        </div>
+
+        <!-- 6 -->
+        <div class="mission-card">
+            <img src="6.png">
+            <h3>Food Distribution</h3>
+            <p><strong>Location:</strong> Gabes</p>
+            <p><strong>Date:</strong> 2025-10-02</p>
+            <p><strong>Hour:</strong> 13:00</p>
+            <p><strong>Donation:</strong> 150 DT</p>
+
+            <button class="participate-btn" onclick="toggleForm('form6')">Participate</button>
+
+            <div class="success-box">Application done successfully!</div>
+
+            <form id="form6" class="apply-form" onsubmit="submitForm(event)">
+                <input type="text" placeholder="Name" required>
+                <input type="email" placeholder="Email" required>
+                <input type="text" placeholder="Phone Number" required>
+                <input type="submit" value="Apply">
+            </form>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
